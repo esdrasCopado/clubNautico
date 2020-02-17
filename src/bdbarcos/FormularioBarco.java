@@ -191,8 +191,7 @@ public class FormularioBarco extends javax.swing.JFrame {
     }//GEN-LAST:event_botonActualizarActionPerformed
 
     private void botonGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonGuardarActionPerformed
-        Neg neg=new Neg();
-        neg.cliente();
+ 
     }//GEN-LAST:event_botonGuardarActionPerformed
 
     /**
