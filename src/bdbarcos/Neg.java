@@ -30,9 +30,9 @@ public class Neg {
 
         try {
             
-            System.out.println(s.getNombre()+s.getTelefono()+s.getDireccion());
-            PreparedStatement pps=co.prepareStatement("INSERT INTO socio(idCliente,nombre,telefono,direccion)VALUES('?','?','?','?');");
-            pps.setString(1, null);
+            System.out.println(s.getId()+" "+s.getNombre()+" "+s.getTelefono()+" "+s.getDireccion());
+            PreparedStatement pps=co.prepareStatement("INSERT INTO socio(idCliente,nombre,telefono,direccion)VALUES(?,?,?,?);");
+            pps.setInt(1, 0);
             pps.setString(2, s.getNombre());
             pps.setString(3, s.getTelefono());
             pps.setString(4, s.getDireccion());

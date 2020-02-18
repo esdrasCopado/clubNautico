@@ -10,7 +10,15 @@ package bdbarcos;
  * @author copad
  */
 public class Socio {
-    
+    private int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
     private String nombre;
     private String telefono;
     private String direccion;
@@ -44,6 +52,11 @@ public class Socio {
 
     public void setDireccion(String direccion) {
         this.direccion = direccion;
+    }
+
+    @Override
+    public String toString() {
+        return "Socio{" + "id=" + id + ", nombre=" + nombre + ", telefono=" + telefono + ", direccion=" + direccion + '}';
     }
     
     

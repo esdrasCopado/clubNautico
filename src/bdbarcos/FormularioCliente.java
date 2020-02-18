@@ -5,9 +5,14 @@
  */
 package bdbarcos;
 
+import static java.nio.file.Files.list;
+import static java.rmi.Naming.list;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import static java.util.Collections.list;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
@@ -73,6 +78,7 @@ public class FormularioCliente extends javax.swing.JFrame {
 
         jLabel4.setText("Direccion");
 
+        TexIdCliente.setEditable(false);
         TexIdCliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 TexIdClienteActionPerformed(evt);
@@ -100,30 +106,34 @@ public class FormularioCliente extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(10, 10, 10)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel1))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(TexNombreSocio)
-                            .addComponent(TexIdCliente, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(TexTelefonoSocio)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jLabel2)
-                        .addGap(198, 198, 198))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(TexDireccionSocio, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
                         .addComponent(BotonGuardar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(actualizar)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 91, Short.MAX_VALUE)
+                        .addComponent(actualizar))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel2)
+                                        .addGap(19, 19, 19))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel1)
+                                            .addComponent(jLabel3))
+                                        .addGap(22, 22, 22))))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(4, 4, 4)
+                                .addComponent(jLabel4)
+                                .addGap(19, 19, 19)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(TexDireccionSocio)
+                            .addComponent(TexIdCliente, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(TexTelefonoSocio)
+                            .addComponent(TexNombreSocio, javax.swing.GroupLayout.Alignment.TRAILING))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -187,10 +197,12 @@ public class FormularioCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_TexIdClienteActionPerformed
 
     private void BotonGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonGuardarActionPerformed
+
         String nombre=TexNombreSocio.getText();
         String telefono=TexTelefonoSocio.getText();
         String direccio=TexDireccionSocio.getText();
         Socio socio=new Socio();
+
         socio.setNombre(nombre);
         socio.setDireccion(direccio);
         socio.setTelefono(telefono);
@@ -210,26 +222,43 @@ public class FormularioCliente extends javax.swing.JFrame {
         
         String datos[] =new String[4];
         
+        ArrayList<Socio> datosDB=new ArrayList();
+        
         ResultSet resultSet=null;
         Statement statement=null;
-        
+        int n=1;
         try {
             Conexion cn=new Conexion();
             statement=cn.Conexion().createStatement();
-            resultSet=statement.executeQuery("SELECT* FROM socio");
+                resultSet=statement.executeQuery("SELECT* FROM socio=");
             while(resultSet.next()){
-                datos[0]=resultSet.getString(1);
-                datos[1]=resultSet.getString(2);
-                datos[2]=resultSet.getString(3);
-                datos[3]=resultSet.getString(4);
+                Socio socio=new Socio();
+                socio.setId(resultSet.getInt(1));
+                socio.setNombre(resultSet.getString(2));
+                socio.setTelefono(resultSet.getString(3));
+                socio.setDireccion(resultSet.getString(4));
+                
+                datos[0]=String.valueOf(socio.getId());
+                datos[1]=String.valueOf(socio.getNombre());
+                datos[2]=String.valueOf(socio.getTelefono());
+                datos[3]=String.valueOf(socio.getDireccion());
+                
+                datosDB.add(socio);
                 modelo.addRow(datos);
             }
             TablaClientes.setModel(modelo);
         } catch (SQLException e) {
             System.out.println(e.getCause());
         }
+        for (int i = 0; i < datosDB.size(); i++) {
+            if(datosDB.get(i).getNombre().equals("esdras")){
+                System.out.println(true);
+            }
+        }
+
     }//GEN-LAST:event_actualizarActionPerformed
 
+    
    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
