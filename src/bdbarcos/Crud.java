@@ -19,7 +19,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author copad
  */
-public class Neg {
+public class Crud {
     
     
     public void cliente(Socio s) {
@@ -45,5 +45,29 @@ public class Neg {
             Logger.getLogger(FormularioCliente.class.getName()).log(Level.SEVERE, null, e);
         }
        
+    }
+    public void actualizar(Socio s){
+        Conexion con=new Conexion();
+        Connection co=con.Conexion();
+        ResultSet resultSet = null;
+        Statement statement = null;
+
+        try {
+            
+            System.out.println(s.getId()+" "+s.getNombre()+" "+s.getTelefono()+" "+s.getDireccion());
+            PreparedStatement pps=co.prepareStatement("UPDATE socio SET IdCliente=?,nombre=?,telefono=?,direccion=? WHERE idCliente=?");
+            pps.setInt(1, s.getId());
+            pps.setString(2, s.getNombre());
+            pps.setString(3, s.getTelefono());
+            pps.setString(4, s.getDireccion());
+            pps.setInt(5, s.getId());
+
+            pps.executeUpdate();
+            
+            
+            con.Conexion().close();
+        } catch (SQLException e) {
+            Logger.getLogger(FormularioCliente.class.getName()).log(Level.SEVERE, null, e);
+        }
     }
 }

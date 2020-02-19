@@ -23,6 +23,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class FormularioCliente extends javax.swing.JFrame {
      ArrayList<Socio> datosDB=new ArrayList();
+     Crud opCrud=new Crud();
     /**
      * Creates new form FormularioCliente
      */
@@ -70,6 +71,11 @@ public class FormularioCliente extends javax.swing.JFrame {
 
             }
         ));
+        TablaClientes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TablaClientesMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(TablaClientes);
 
         jLabel1.setText("Nombre");
@@ -218,13 +224,11 @@ public class FormularioCliente extends javax.swing.JFrame {
         socio.setNombre(nombre);
         socio.setDireccion(direccio);
         socio.setTelefono(telefono);
-        Neg negocio=new Neg();
         
-        negocio.cliente(socio);
+        
+        opCrud.cliente(socio);
         actualizarTabla();
-        TexNombreSocio.setText("");
-        TexTelefonoSocio.setText("");
-        TexDireccionSocio.setText("");
+        limpiar();
         
     }//GEN-LAST:event_BotonGuardarActionPerformed
 
@@ -270,7 +274,16 @@ public class FormularioCliente extends javax.swing.JFrame {
     
     }
     private void actualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualizarActionPerformed
+        int idSocio=Integer.valueOf(TexIdCliente.getText());
+        String nombre=TexNombreSocio.getText();
+        String telefono=TexTelefonoSocio.getText();
+        String direccio=TexDireccionSocio.getText();
+        
+        Socio s=new Socio(idSocio, nombre, telefono, direccio);
+        
+        opCrud.actualizar(s);
         actualizarTabla();
+        limpiar();
     }//GEN-LAST:event_actualizarActionPerformed
 
     private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
@@ -294,6 +307,22 @@ public class FormularioCliente extends javax.swing.JFrame {
             modelo.addRow(datos);}
         }
     }//GEN-LAST:event_jToggleButton1ActionPerformed
+
+    public void limpiar(){
+        TexIdCliente.setText("");
+        TexNombreSocio.setText("");
+        TexTelefonoSocio.setText("");
+        TexDireccionSocio.setText("");
+    }
+    private void TablaClientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablaClientesMouseClicked
+        
+        
+        int seleccion=TablaClientes.rowAtPoint(evt.getPoint());
+        TexIdCliente.setText(String.valueOf(TablaClientes.getValueAt(seleccion,0 )));
+        TexNombreSocio.setText(String.valueOf(TablaClientes.getValueAt(seleccion,1 )));
+        TexTelefonoSocio.setText(String.valueOf(TablaClientes.getValueAt(seleccion,2 )));
+        TexDireccionSocio.setText(String.valueOf(TablaClientes.getValueAt(seleccion,3 )));
+    }//GEN-LAST:event_TablaClientesMouseClicked
 
     
    

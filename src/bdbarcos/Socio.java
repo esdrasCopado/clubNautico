@@ -11,7 +11,7 @@ package bdbarcos;
  */
 public class Socio {
     private int id;
-
+    
     public int getId() {
         return id;
     }
@@ -25,10 +25,11 @@ public class Socio {
     public Socio(){
     
     }
-    public Socio(String nom,String tel,String dir){
-        nom=nombre;
-        tel=telefono;
-        dir=direccion;
+    public Socio(int id,String nom,String tel,String dir){
+        this.nombre=nom;
+        this.id=id;
+        this.telefono=tel;
+        this.direccion=dir;
     }
     public String getNombre() {
         return nombre;
