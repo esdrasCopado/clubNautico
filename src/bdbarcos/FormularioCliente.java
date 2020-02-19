@@ -22,12 +22,13 @@ import javax.swing.table.DefaultTableModel;
  * @author copad
  */
 public class FormularioCliente extends javax.swing.JFrame {
-
+     ArrayList<Socio> datosDB=new ArrayList();
     /**
      * Creates new form FormularioCliente
      */
     public FormularioCliente() {
         initComponents();
+        actualizarTabla();
     }
 
     /**
@@ -54,6 +55,7 @@ public class FormularioCliente extends javax.swing.JFrame {
         Busqueda = new javax.swing.JTextField();
         BotonGuardar = new javax.swing.JToggleButton();
         actualizar = new javax.swing.JToggleButton();
+        jToggleButton1 = new javax.swing.JToggleButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -85,7 +87,7 @@ public class FormularioCliente extends javax.swing.JFrame {
             }
         });
 
-        jLabel5.setText("Buscar");
+        jLabel5.setText("Buscar ID");
 
         BotonGuardar.setText("guardar");
         BotonGuardar.addActionListener(new java.awt.event.ActionListener() {
@@ -98,6 +100,13 @@ public class FormularioCliente extends javax.swing.JFrame {
         actualizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 actualizarActionPerformed(evt);
+            }
+        });
+
+        jToggleButton1.setText("buscar");
+        jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleButton1ActionPerformed(evt);
             }
         });
 
@@ -139,7 +148,9 @@ public class FormularioCliente extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addGap(18, 18, 18)
-                        .addComponent(Busqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(Busqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
@@ -149,8 +160,9 @@ public class FormularioCliente extends javax.swing.JFrame {
                 .addGap(19, 19, 19)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(Busqueda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+                    .addComponent(Busqueda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addGap(18, 18, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -209,9 +221,14 @@ public class FormularioCliente extends javax.swing.JFrame {
         Neg negocio=new Neg();
         
         negocio.cliente(socio);
+        actualizarTabla();
+        TexNombreSocio.setText("");
+        TexTelefonoSocio.setText("");
+        TexDireccionSocio.setText("");
+        
     }//GEN-LAST:event_BotonGuardarActionPerformed
 
-    private void actualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualizarActionPerformed
+    public void actualizarTabla(){
          DefaultTableModel modelo=new DefaultTableModel();
         modelo.addColumn("id");
         modelo.addColumn("nombre");
@@ -222,15 +239,15 @@ public class FormularioCliente extends javax.swing.JFrame {
         
         String datos[] =new String[4];
         
-        ArrayList<Socio> datosDB=new ArrayList();
+       
         
         ResultSet resultSet=null;
         Statement statement=null;
-        int n=1;
+        
         try {
             Conexion cn=new Conexion();
             statement=cn.Conexion().createStatement();
-                resultSet=statement.executeQuery("SELECT* FROM socio=");
+                resultSet=statement.executeQuery("SELECT* FROM socio");
             while(resultSet.next()){
                 Socio socio=new Socio();
                 socio.setId(resultSet.getInt(1));
@@ -250,13 +267,33 @@ public class FormularioCliente extends javax.swing.JFrame {
         } catch (SQLException e) {
             System.out.println(e.getCause());
         }
-        for (int i = 0; i < datosDB.size(); i++) {
-            if(datosDB.get(i).getNombre().equals("esdras")){
-                System.out.println(true);
-            }
-        }
-
+    
+    }
+    private void actualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualizarActionPerformed
+        actualizarTabla();
     }//GEN-LAST:event_actualizarActionPerformed
+
+    private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
+        String datos[]=new String[4];
+        
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("id");
+        modelo.addColumn("nombre");
+        modelo.addColumn("telefono");
+        modelo.addColumn("direccion");
+        String nombre=Busqueda.getText();
+        TablaClientes.setModel(modelo);
+        
+        for (int i = 0; i < datosDB.size(); i++) {
+            if(datosDB.get(i).getNombre().equals(nombre)){
+                
+            datos[0]=String.valueOf(datosDB.get(i).getId());
+            datos[1]=datosDB.get(i).getNombre();
+            datos[2]=datosDB.get(i).getTelefono();
+            datos[3]=datosDB.get(i).getDireccion();
+            modelo.addRow(datos);}
+        }
+    }//GEN-LAST:event_jToggleButton1ActionPerformed
 
     
    
@@ -277,5 +314,6 @@ public class FormularioCliente extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JToggleButton jToggleButton1;
     // End of variables declaration//GEN-END:variables
 }
